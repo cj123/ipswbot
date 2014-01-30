@@ -11,25 +11,45 @@ public class FwlinksBot extends PircBot
 	} // FwlinksBot
 
 	public static void main(String[] args) throws Exception {
-		FwlinksBot bot = new FwlinksBot();
-		try 
-		{
-			// configuration
-			bot.setVerbose(false);
-			bot.connect("irc.freenode.net");
 
-			bot.joinChannel("#JailbreakQA");
-			bot.joinChannel("#testfwlinks");
-		} // try
-		catch (Exception exception) 
-		{
-			System.out.println(exception);
-		} // catch
+		Server[] servers = { 
+			new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#iH8sn0w"}),
+			new Server("iphun.osx86.hu", 6667, new String[] {"#ios"}),
+			new Server("irc.saurik.com", 6667, new String[] {"#teambacon"}),
+			new Server("irc.freenode.net", 6667, new String[] {"#jailbreakqa", "#openjailbreak", "#testfwlinks"})
+		};
+
+		// connect to each server
+		for(Server server : servers) {
+
+			FwlinksBot bot = new FwlinksBot();
+			try 
+			{
+				// configuration
+				bot.setVerbose(false);
+				bot.setAutoNickChange(true);
+				bot.connect(server.getAddress(), server.getPort());
+
+				for(String channel : server.getChannels())
+					bot.joinChannel(channel);
+				
+			} // try
+			catch (Exception exception) 
+			{
+				System.out.println(exception);
+			} // catch
+		} // for
 	} // main
 
 	public void errorMessage(String channel, String sender, String message) {
 		sendMessage(channel, sender + ": " + message);
 	} // errorMessage
+
+	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel)
+	{
+		joinChannel(channel);
+		sendMessage(channel, sourceNick + ": thanks for the invite!");
+	} // onInvite
 
 	protected void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
