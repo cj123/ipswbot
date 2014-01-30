@@ -5,16 +5,19 @@ import java.util.Date;
 
 public class FwlinksBot extends PircBot
 {
-
 	// servers
 	private static Server[] servers = {
-		new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#iH8sn0w"}),
+		new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#iH8sn0w", "#fwlinksbot"}),
 		new Server("iphun.osx86.hu", 6667, new String[] {"#ios"}),
 		new Server("irc.saurik.com", 6667, new String[] {"#teambacon"}),
 		new Server("irc.freenode.net", 6667, new String[] {"#jailbreakqa", "#openjailbreak", "#testfwlinks"})
 	};
 
+	// bots
 	private static FwlinksBot[] bots = new FwlinksBot[servers.length];
+
+	// the socket server for receiving the messages
+	private static ReleaseMessage releaseMessage = new ReleaseMessage(bots);
 
 	public FwlinksBot()
 	{
@@ -55,6 +58,8 @@ public class FwlinksBot extends PircBot
 				System.out.println(exception);
 			} // catch
 		} // for
+
+		releaseMessage.start();
 	} // main
 
 	public void errorMessage(String channel, String sender, String message)

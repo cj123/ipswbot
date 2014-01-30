@@ -159,7 +159,8 @@ public class APIRequest
 
 		String response = makeURLRequest("http://api.ineal.me/tss/" + args[1] + "/less");
 
-		this.sendMessage(response);
+		if(!response.equals("null"))
+			this.sendMessage(response);
 	} // tss
 
 	public void shsh(String[] args) {
@@ -171,7 +172,8 @@ public class APIRequest
 
 		String response = makeURLRequest("http://api.ineal.me/shsh/" + args[1]);
 
-		this.sendMessage(response);
+		if(!response.equals("null"))
+			this.sendMessage(response);
 	} // shsh
 
 	public void pwnagetool(String[] args) {
