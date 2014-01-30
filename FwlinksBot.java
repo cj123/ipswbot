@@ -4,22 +4,22 @@ public class FwlinksBot extends PircBot
 {
 	public FwlinksBot()
 	{
-		this.setName("fwlinksbot_");
+		this.setName("fwlinksbot");
 		this.setLogin("fwlinks");
+		this.setVersion("fwlinksbot");
 		//this.setIdent("fwlinks");
 	} // FwlinksBot
 
 	public static void main(String[] args) throws Exception {
 		FwlinksBot bot = new FwlinksBot();
-
 		try 
 		{
 			// configuration
-			bot.setVerbose(true);
+			bot.setVerbose(false);
 			bot.connect("irc.freenode.net");
 
+			bot.joinChannel("#JailbreakQA");
 			bot.joinChannel("#testfwlinks");
-			bot.joinChannel("#testfwlinks2");
 		} // try
 		catch (Exception exception) 
 		{

@@ -70,8 +70,7 @@ public class APIRequest
 			if(args.length == 2) {
 				argsNew[2] = "latest";
 				argsNew[3] = "url";
-				System.out.println("hi!");
-			}
+			} // if
 
 			if(args.length == 3)
 				argsNew[3] = "url";
