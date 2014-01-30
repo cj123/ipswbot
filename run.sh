@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java -classpath pircbot.jar:. FwlinksBot
+java -classpath include/pircbot.jar:. FwlinksBot

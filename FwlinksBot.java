@@ -1,36 +1,52 @@
 import org.jibble.pircbot.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FwlinksBot extends PircBot
 {
+
+	// servers
+	private static Server[] servers = {
+		new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#iH8sn0w"}),
+		new Server("iphun.osx86.hu", 6667, new String[] {"#ios"}),
+		new Server("irc.saurik.com", 6667, new String[] {"#teambacon"}),
+		new Server("irc.freenode.net", 6667, new String[] {"#jailbreakqa", "#openjailbreak", "#testfwlinks"})
+	};
+
+	private static FwlinksBot[] bots = new FwlinksBot[servers.length];
+
 	public FwlinksBot()
 	{
 		this.setName("fwlinksbot");
 		this.setLogin("fwlinks");
 		this.setVersion("fwlinksbot");
-		//this.setIdent("fwlinks");
 	} // FwlinksBot
 
-	public static void main(String[] args) throws Exception {
+	public static void printLog(String message)
+	{
+        Date date = new Date();
+        DateFormat dateFormat = 
+            new SimpleDateFormat("[HH:mm:ss] ");
+        System.out.println(dateFormat.format(date) + message);
+	}
 
-		Server[] servers = { 
-			new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#iH8sn0w"}),
-			new Server("iphun.osx86.hu", 6667, new String[] {"#ios"}),
-			new Server("irc.saurik.com", 6667, new String[] {"#teambacon"}),
-			new Server("irc.freenode.net", 6667, new String[] {"#jailbreakqa", "#openjailbreak", "#testfwlinks"})
-		};
-
+	public static void main(String[] args) throws Exception 
+	{
 		// connect to each server
-		for(Server server : servers) {
-
+		for(int botIndex = 0; botIndex < servers.length; botIndex++)
+		{
 			FwlinksBot bot = new FwlinksBot();
+			bots[botIndex] = bot;
 			try 
 			{
 				// configuration
 				bot.setVerbose(false);
 				bot.setAutoNickChange(true);
-				bot.connect(server.getAddress(), server.getPort());
+				printLog("Connecting to server: " + servers[botIndex].getAddress());
+				bot.connect(servers[botIndex].getAddress(), servers[botIndex].getPort());
 
-				for(String channel : server.getChannels())
+				for(String channel : servers[botIndex].getChannels())
 					bot.joinChannel(channel);
 				
 			} // try
@@ -41,12 +57,15 @@ public class FwlinksBot extends PircBot
 		} // for
 	} // main
 
-	public void errorMessage(String channel, String sender, String message) {
+	public void errorMessage(String channel, String sender, String message)
+	{
+		printLog("error: " + sender + ": " + message);
 		sendMessage(channel, sender + ": " + message);
 	} // errorMessage
 
 	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel)
 	{
+		printLog("Invite to channel " + channel + " received. Joining...");
 		joinChannel(channel);
 		sendMessage(channel, sourceNick + ": thanks for the invite!");
 	} // onInvite

@@ -84,6 +84,9 @@ public class APIRequest
 	private void sendMessage(String message)
 	{
 		message = sender + ": " + message;
+
+		bot.printLog("Sending message '" + message + "' to " + channel);
+
 		bot.sendMessage(channel, message);
 	} // sendMessage
 
