@@ -5,7 +5,7 @@ public class ReleaseMessage extends Thread
 {
 
 	//private final String socketAddress = "trifid.icj.me";
-	private final int socketPort = 4444;
+	private final int socketPort = 4536;
 	private final FwlinksBot[] bots;
 
 	public void run()
