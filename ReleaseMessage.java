@@ -5,7 +5,7 @@ public class ReleaseMessage extends Thread
 {
 
 	//private final String socketAddress = "trifid.icj.me";
-	private final int socketPort = 4536;
+	private final int socketPort = 4444;
 	private final FwlinksBot[] bots;
 
 	public void run()
@@ -17,7 +17,7 @@ public class ReleaseMessage extends Thread
 			try
 			(
 				// configure sockets
-				ServerSocket serverSocket = new ServerSocket(socketPort);
+				ServerSocket serverSocket = new ServerSocket(socketPort, 0, InetAddress.getByName(null));
 				Socket clientSocket = serverSocket.accept(); 
 				PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
