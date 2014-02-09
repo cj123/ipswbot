@@ -2,7 +2,7 @@ public class FwlinksBotTest
 {
 	// servers
 	private static Server[] servers = {
-		new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#fwlinksbot"}),
+		new Server("irc.chronic-dev.org", 6667, new String[] {"#fwlinksbot"}),
 	};
 
 	// bots
@@ -37,5 +37,5 @@ public class FwlinksBotTest
 		} // for
 
 		releaseMessage.start();
-	}
-}
+	} // main
+} // FwlinksBotTest

@@ -92,14 +92,16 @@ public class APIRequest
 
 	public void firmware(String[] args)
 	{
-		if(args.length < 2) {
+		if(args.length < 2)
+		{
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
 
 		args = this.argsPrepare(args);
 
-		if(args[3].equals("info")) {
+		if(args[3].equals("info"))
+		{
 			bot.errorMessage(channel, sender, "this type of request is not supported.");
 			return;
 		} // if
@@ -111,9 +113,11 @@ public class APIRequest
 					: "this request combo is unknown."));
 	} // firmware
 
-	public void redsn0w(String[] args) {
+	public void redsn0w(String[] args)
+	{
 
-		if(args.length < 2) {
+		if(args.length < 2)
+		{
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
@@ -127,9 +131,11 @@ public class APIRequest
 					: "this request combo is unknown."));
 	} // redsn0w
 
-	public void iTunes(String[] args) {
+	public void iTunes(String[] args)
+	{
 
-		if(args.length < 2) {
+		if(args.length < 2)
+		{
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		}
@@ -150,9 +156,11 @@ public class APIRequest
 					: "this request combo is unknown."));
 	} // iTunes
 
-	public void tss(String[] args) {
+	public void tss(String[] args)
+	{
 
-		if(args.length < 2) {
+		if(args.length < 2)
+		{
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
@@ -163,9 +171,11 @@ public class APIRequest
 			this.sendMessage(response);
 	} // tss
 
-	public void shsh(String[] args) {
+	public void shsh(String[] args)
+	{
 
-		if(args.length < 2) {
+		if(args.length < 2)
+		{
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
@@ -176,9 +186,11 @@ public class APIRequest
 			this.sendMessage(response);
 	} // shsh
 
-	public void pwnagetool(String[] args) {
+	public void pwnagetool(String[] args)
+	{
 
-		if(args.length < 2) {
+		if(args.length < 2)
+		{
 			String[] argsNew = new String[3];
 
 			argsNew[0] = args[0];
@@ -186,7 +198,9 @@ public class APIRequest
 			argsNew[2] = "url";
 
 			args = argsNew;
-		} else if(args.length < 3) {
+		} // if
+		else if(args.length < 3)
+		{
 			String[] argsNew = new String[3];
 
 			argsNew[0] = args[0];
@@ -194,7 +208,7 @@ public class APIRequest
 			argsNew[2] = "url";
 
 			args = argsNew;
-		}
+		} // else if
 
 		String response = makeURLRequest(APIBASE + "/PwnageTool/" + args[1] + "/" + args[2]);
 
@@ -203,4 +217,4 @@ public class APIRequest
 					: "this request combo is unknown."));
 	} // pwnagetool
 
-}
+} // APIRequest

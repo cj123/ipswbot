@@ -1,5 +1,6 @@
 public class Server
 {
+	// channels, address and port
 	private String[] channels;
 	private String address;
 	private int port;
@@ -21,7 +22,8 @@ public class Server
 		return port;
 	} // getPort
 
-	public String[] getChannels() {
+	public String[] getChannels()
+	{
 		return channels;
 	} // getChannels
-}
+} // Server

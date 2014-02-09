@@ -82,47 +82,24 @@ public class FwlinksBot extends PircBot
 
 		APIRequest api = new APIRequest(this, channel, sender);
 
-		switch(args[0].toLowerCase()) {
-
+		switch(args[0].toLowerCase())
+		{
 			case "!help":
-				this.sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot");
+				this.sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot"
+				                 + " i'm open source! more info here: https://gitlab.icj.me/cj/fwlinksbot2");
 			break;
 
-			case "!fw":
-			case "!firmware":
-				api.firmware(args);
-			break;
-
-			case "!redsn0w":
-			case "!rs":
-				api.redsn0w(args);
-			break;
-
-			case "!itunes":
-			case "!it":
-				api.iTunes(args);
-			break;
-
-			case "!tss":
-				api.tss(args);
-			break;
-
-			case "!shsh":
-				api.shsh(args);
-			break;
-
-			case "!pwnagetool":
-			case "!pt":
-				api.pwnagetool(args);
-			break;
-
-			default:
-			break;
+			// commands
+			case "!fw": case "!firmware": api.firmware(args); break;
+			case "!redsn0w": case "!rs": api.redsn0w(args); break;
+			case "!itunes": case "!it": api.iTunes(args); break;
+			case "!tss": api.tss(args); break;
+			case "!shsh": api.shsh(args); break;
+			case "!pwnagetool": case "!pt": api.pwnagetool(args); break;
 
 		} // switch
 
 		return;
-
 	} // onMessage
 
-}
+} // FwlinksBot
