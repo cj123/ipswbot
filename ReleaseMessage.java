@@ -8,6 +8,7 @@ public class ReleaseMessage extends Thread
 	private final int socketPort = 4536;
 	private final FwlinksBot[] bots;
 
+	@Override
 	public void run()
 	{
 		bots[0].printLog("starting socket server on port " + socketPort);

@@ -21,6 +21,7 @@ public class FwlinksBot extends PircBot
 
 	public FwlinksBot()
 	{
+		super();
 		this.setName("fwlinksbot");
 		this.setLogin("fwlinks");
 		this.setVersion("fwlinksbot");
@@ -68,6 +69,7 @@ public class FwlinksBot extends PircBot
 		sendMessage(channel, sender + ": " + message);
 	} // errorMessage
 
+	@Override
 	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel)
 	{
 		printLog("Invite to channel " + channel + " received. Joining...");
@@ -75,6 +77,7 @@ public class FwlinksBot extends PircBot
 		sendMessage(channel, sourceNick + ": thanks for the invite!");
 	} // onInvite
 
+	@Override
 	protected void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
 		// parse args into an array
@@ -101,5 +104,52 @@ public class FwlinksBot extends PircBot
 
 		return;
 	} // onMessage
+
+	@Override
+	protected void onDisconnect()
+	{
+		int reconnectAttempts = 0;
+
+		System.out.println("Connection to " + getServer() + " dropped, "
+		                   + "trying to reconnect...");
+
+		// try to reconnect
+		while(!isConnected() && reconnectAttempts < 15)
+		{
+			try
+			{
+				// reconnect
+				reconnectAttempts++;
+				reconnect();
+			} // try
+			catch (Exception e)
+			{
+				// failed to reconnect
+				System.out.println("Error: could not reconnect to " + getServer() + "\n"
+				                   + e.getMessage());
+				try
+				{
+				    Thread.sleep(4000);
+				} // try
+				catch(InterruptedException exception) 
+				{
+				    Thread.currentThread().interrupt();
+				} // catch
+			} // catch
+		} // while
+
+		// check if it has reconnected
+		if(isConnected())
+		{
+			System.out.println("Reconnected to server: " + getServer());
+		} // if
+		else
+		{
+			System.out.println("Unable to reconnect to server: " + getServer()
+			                   + " - disabling.");
+		} // else
+
+	} // onDisconnect
+
 
 } // FwlinksBot
