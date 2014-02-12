@@ -100,7 +100,7 @@ public class APIRequest
 
 		args = this.argsPrepare(args);
 
-		if(args[3].equals("info"))
+		if(args[3].equals("info") || args[3].equals("info.json"))
 		{
 			bot.errorMessage(channel, sender, "this type of request is not supported.");
 			return;

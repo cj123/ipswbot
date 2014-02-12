@@ -29,10 +29,10 @@ public class FwlinksBot extends PircBot
 
 	public static void printLog(String message)
 	{
-        Date date = new Date();
-        DateFormat dateFormat = 
-            new SimpleDateFormat("[HH:mm:ss] ");
-        System.out.println(dateFormat.format(date) + message);
+    Date date = new Date();
+    DateFormat dateFormat = 
+     	new SimpleDateFormat("[HH:mm:ss] ");
+    System.out.println(dateFormat.format(date) + message);
 	}
 
 	public static void main(String[] args) throws Exception 
@@ -125,7 +125,7 @@ public class FwlinksBot extends PircBot
 			catch (Exception e)
 			{
 				// failed to reconnect
-				System.out.println("Error: could not reconnect to " + getServer() + "\n"
+				this.printLog("Error: could not reconnect to " + getServer() + "\n"
 				                   + e.getMessage());
 				try
 				{
@@ -141,11 +141,22 @@ public class FwlinksBot extends PircBot
 		// check if it has reconnected
 		if(isConnected())
 		{
-			System.out.println("Reconnected to server: " + getServer());
+			this.printLog("Reconnected to server: " + getServer());
+
+			// rejoin channels
+			for(Server server : servers)
+			{
+				if(server.getAddress().equals(getServer()))
+				{
+					// rejoin channels
+					for(String channel : server.getChannels())
+						joinChannel(channel);
+				} // if
+			} // for
 		} // if
 		else
 		{
-			System.out.println("Unable to reconnect to server: " + getServer()
+			this.printLog("Unable to reconnect to server: " + getServer()
 			                   + " - disabling.");
 		} // else
 
