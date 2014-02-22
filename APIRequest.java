@@ -13,9 +13,9 @@ public class APIRequest
 
 	public APIRequest(FwlinksBot requiredBot, String requiredChannel, String requiredSender)
 	{
-		this.bot = requiredBot;
-		this.channel = requiredChannel;
-		this.sender = requiredSender;
+		bot = requiredBot;
+		channel = requiredChannel;
+		sender = requiredSender;
 	} // APIRequest
 
 	private static String makeURLRequest(String url)
@@ -98,7 +98,7 @@ public class APIRequest
 			return;
 		} // if
 
-		args = this.argsPrepare(args);
+		args = argsPrepare(args);
 
 		if(args[3].equals("info") || args[3].equals("info.json"))
 		{
@@ -108,7 +108,7 @@ public class APIRequest
 
 		String response = makeURLRequest(APIBASE + "/" + args[1] + "/" + args[2] + "/" + args[3]);
 
-		this.sendMessage((response != null
+		sendMessage((response != null
 					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
 					: "this request combo is unknown."));
 	} // firmware
@@ -122,11 +122,11 @@ public class APIRequest
 			return;
 		} // if
 
-		args = this.argsPrepare(args);
+		args = argsPrepare(args);
 
 		String response = makeURLRequest(APIBASE + "/redsn0w/" + args[1] + "/" + args[2] + "/" + args[3]);
 
-		this.sendMessage((response != null
+		sendMessage((response != null
 					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
 					: "this request combo is unknown."));
 	} // redsn0w
@@ -140,7 +140,7 @@ public class APIRequest
 			return;
 		}
 
-		args = this.argsPrepare(args);
+		args = argsPrepare(args);
 
 		String response;
 
@@ -151,7 +151,7 @@ public class APIRequest
 		else
 			response = makeURLRequest(APIBASE + "/iTunes/" + args[1] + "/" + args[2] + "/" + args[3]);
 
-		this.sendMessage((response != null
+		sendMessage((response != null
 					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
 					: "this request combo is unknown."));
 	} // iTunes
@@ -168,7 +168,7 @@ public class APIRequest
 		String response = makeURLRequest("http://api.ineal.me/tss/" + args[1] + "/less");
 
 		if(!response.equals("null"))
-			this.sendMessage(response);
+			sendMessage(response);
 	} // tss
 
 	public void shsh(String[] args)
@@ -183,7 +183,7 @@ public class APIRequest
 		String response = makeURLRequest("http://api.ineal.me/shsh/" + args[1]);
 
 		if(!response.equals("null"))
-			this.sendMessage(response);
+			sendMessage(response);
 	} // shsh
 
 	public void pwnagetool(String[] args)
@@ -212,9 +212,9 @@ public class APIRequest
 
 		String response = makeURLRequest(APIBASE + "/PwnageTool/" + args[1] + "/" + args[2]);
 
-		this.sendMessage((response != null
+		sendMessage((response != null
 					? "the " + args[2] + " for PwnageTool (" + args[1] + ") is " + response 
-					: "this request combo is unknown."));
+					: "request combo is unknown."));
 	} // pwnagetool
 
 } // APIRequest

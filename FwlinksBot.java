@@ -5,63 +5,19 @@ import java.util.Date;
 
 public class FwlinksBot extends PircBot
 {
-	// servers
-	private static Server[] servers = {
-		new Server("irc.chronic-dev.org", 6667, new String[] {"#cj-case", "#iH8sn0w", "#fwlinksbot"}),
-		new Server("iphun.osx86.hu", 6667, new String[] {"#ios"}),
-		new Server("irc.saurik.com", 6667, new String[] {"#teambacon"}),
-		new Server("irc.freenode.net", 6667, new String[] {"#jailbreakqa", "#openjailbreak", "#testfwlinks"})
-	};
+	private Server server;
 
-	// bots
-	private static FwlinksBot[] bots = new FwlinksBot[servers.length];
-
-	// the socket server for receiving the messages
-	private static ReleaseMessage releaseMessage = new ReleaseMessage(bots);
-
-	public FwlinksBot()
+	public FwlinksBot(Server requiredServer)
 	{
 		super();
-		this.setName("fwlinksbot");
-		this.setLogin("fwlinks");
-		this.setVersion("fwlinksbot");
-	} // FwlinksBot
+		server = requiredServer;
 
-	public static void printLog(String message)
-	{
-    Date date = new Date();
-    DateFormat dateFormat = 
-     	new SimpleDateFormat("[HH:mm:ss] ");
-    System.out.println(dateFormat.format(date) + message);
+		// configuration
+		setName("fwlinksbot");
+		setLogin("fwlinks");
+		setVersion("fwlinksbot");
+		setAutoNickChange(true);
 	}
-
-	public static void main(String[] args) throws Exception 
-	{
-		// connect to each server
-		for(int botIndex = 0; botIndex < servers.length; botIndex++)
-		{
-			FwlinksBot bot = new FwlinksBot();
-			bots[botIndex] = bot;
-			try 
-			{
-				// configuration
-				bot.setVerbose(false);
-				bot.setAutoNickChange(true);
-				printLog("Connecting to server: " + servers[botIndex].getAddress());
-				bot.connect(servers[botIndex].getAddress(), servers[botIndex].getPort());
-
-				for(String channel : servers[botIndex].getChannels())
-					bot.joinChannel(channel);
-				
-			} // try
-			catch (Exception exception) 
-			{
-				System.out.println(exception);
-			} // catch
-		} // for
-
-		releaseMessage.start();
-	} // main
 
 	public void errorMessage(String channel, String sender, String message)
 	{
@@ -74,7 +30,8 @@ public class FwlinksBot extends PircBot
 	{
 		printLog("Invite to channel " + channel + " received. Joining...");
 		joinChannel(channel);
-		sendMessage(channel, sourceNick + ": thanks for the invite!");
+		server.addChannel(channel);
+		// sendMessage(channel, sourceNick + ": thanks for the invite!");
 	} // onInvite
 
 	@Override
@@ -88,8 +45,8 @@ public class FwlinksBot extends PircBot
 		switch(args[0].toLowerCase())
 		{
 			case "!help":
-				this.sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot"
-				                 + " i'm open source! more info here: https://gitlab.icj.me/cj/fwlinksbot2");
+				sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot"
+												 + " i'm open source! more info here: https://github.com/JustaPenguin/fwlinksbot2");
 			break;
 
 			// commands
@@ -99,11 +56,19 @@ public class FwlinksBot extends PircBot
 			case "!tss": api.tss(args); break;
 			case "!shsh": api.shsh(args); break;
 			case "!pwnagetool": case "!pt": api.pwnagetool(args); break;
+			case "!fwinfo": sendMessage(channel, server.toString()); break;
 
 		} // switch
 
 		return;
 	} // onMessage
+
+	public void printLog(String message)
+	{
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("[HH:mm:ss] ");
+		System.out.println(dateFormat.format(date) + message);
+	}
 
 	@Override
 	protected void onDisconnect()
@@ -111,7 +76,7 @@ public class FwlinksBot extends PircBot
 		int reconnectAttempts = 0;
 
 		System.out.println("Connection to " + getServer() + " dropped, "
-		                   + "trying to reconnect...");
+											 + "trying to reconnect...");
 
 		// try to reconnect
 		while(!isConnected() && reconnectAttempts < 15)
@@ -125,15 +90,15 @@ public class FwlinksBot extends PircBot
 			catch (Exception e)
 			{
 				// failed to reconnect
-				this.printLog("Error: could not reconnect to " + getServer() + "\n"
-				                   + e.getMessage());
+				printLog("Error: could not reconnect to " + getServer() + "\n"
+													 + e.getMessage());
 				try
 				{
-				    Thread.sleep(4000);
+						Thread.sleep(4000);
 				} // try
 				catch(InterruptedException exception) 
 				{
-				    Thread.currentThread().interrupt();
+						Thread.currentThread().interrupt();
 				} // catch
 			} // catch
 		} // while
@@ -141,26 +106,25 @@ public class FwlinksBot extends PircBot
 		// check if it has reconnected
 		if(isConnected())
 		{
-			this.printLog("Reconnected to server: " + getServer());
+			printLog("Reconnected to server: " + getServer());
 
-			// rejoin channels
-			for(Server server : servers)
+			if(server.getAddress().equals(getServer()))
 			{
-				if(server.getAddress().equals(getServer()))
-				{
-					// rejoin channels
-					for(String channel : server.getChannels())
-						joinChannel(channel);
-				} // if
-			} // for
+				// rejoin channels
+				for(String channel : server.getChannels())
+					joinChannel(channel);
+			} // if
+			else
+			{
+				printLog("We somehow connected to a different server?");
+			} // else
 		} // if
 		else
 		{
-			this.printLog("Unable to reconnect to server: " + getServer()
-			                   + " - disabling.");
+			printLog("Unable to reconnect to server: " + getServer()
+												 + " - disabling.");
 		} // else
 
 	} // onDisconnect
-
 
 } // FwlinksBot

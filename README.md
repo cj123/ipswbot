@@ -1,7 +1,7 @@
 # Firmware Links Bot v2.0
 
-Bigger, better, faster, stronger.
+A rewrite of the original FwlinksBot, in Java. 
 
-Enjoy, world!
+Be sure to edit `example.config.properties` and rename it to `config.properties`.
 
 Uses [PircBot](http://www.jibble.org/pircbot.php).
