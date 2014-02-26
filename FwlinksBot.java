@@ -25,6 +25,39 @@ public class FwlinksBot extends PircBot
 		sendMessage(channel, sender + ": " + message);
 	} // errorMessage
 
+	// the max amount of chars before splitting a message into parts
+	private static final int MESSAGE_SPLIT_LENGTH = 300;
+
+	public void sendSplitMessage(String channel, String message)
+	{
+
+		printLog("Sending message '" + message + "' to " + channel);
+
+		if(message.length() >= 1000)
+		{
+			// this request obviously is not valid. Kill it, kill it quick
+			printLog("response was too long. not sending to channel...");
+			return;
+		} // if
+		else if(message.length() > MESSAGE_SPLIT_LENGTH)
+		{
+
+			String[] splitInput = message.split("(?<=\\G.{" + MESSAGE_SPLIT_LENGTH + "})");
+
+			sendMessage(channel, splitInput[0] + "...");
+
+			for(int index = 1; index < splitInput.length - 1; index ++)
+				sendMessage(channel, splitInput[index] + "...");
+
+			sendMessage(channel, splitInput[splitInput.length - 1]);
+
+		} // else if
+		else
+		{
+			sendMessage(channel, message);
+		} // else
+	} // sendSplitMessage
+
 	@Override
 	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel)
 	{
@@ -90,8 +123,7 @@ public class FwlinksBot extends PircBot
 			catch (Exception e)
 			{
 				// failed to reconnect
-				printLog("Error: could not reconnect to " + getServer() + "\n"
-													 + e.getMessage());
+				printLog("Error: could not reconnect to " + getServer() + "\n" + e.getMessage());
 				try
 				{
 						Thread.sleep(4000);
@@ -121,8 +153,7 @@ public class FwlinksBot extends PircBot
 		} // if
 		else
 		{
-			printLog("Unable to reconnect to server: " + getServer()
-												 + " - disabling.");
+			printLog("Unable to reconnect to server: " + getServer() + " - disabling.");
 		} // else
 
 	} // onDisconnect

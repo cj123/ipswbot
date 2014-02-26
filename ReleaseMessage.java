@@ -6,8 +6,6 @@ public class ReleaseMessage extends Thread
 	private static final int socketPort = 4536;
 	private final FwlinksBot[] bots;
 
-	private static final int MESSAGE_SPLIT_LENGTH = 300;
-
 	@Override
 	public void run()
 	{
@@ -33,23 +31,7 @@ public class ReleaseMessage extends Thread
 						// send to each channel
 						for(String channel : bot.getChannels())
 						{
-							if(inputLine.length() > MESSAGE_SPLIT_LENGTH)
-							{
-
-								String[] splitInput = inputLine.split("(?<=\\G.{" + MESSAGE_SPLIT_LENGTH + "})");
-
-								bot.sendMessage(channel, "[Update] " + splitInput[0] + "...");
-
-								for(int index = 1; index < splitInput.length - 1; index ++)
-									bot.sendMessage(channel, splitInput[index] + "...");
-
-								bot.sendMessage(channel, splitInput[splitInput.length - 1]);
-
-							} // if
-							else
-							{
-								bot.sendMessage(channel, "[Update] " + inputLine);
-							} // else
+								bot.sendSplitMessage(channel, "[Update] " + inputLine);
 						} // for
 					} // for
 				} // while

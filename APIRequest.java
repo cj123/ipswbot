@@ -84,10 +84,7 @@ public class APIRequest
 	private void sendMessage(String message)
 	{
 		message = sender + ": " + message;
-
-		bot.printLog("Sending message '" + message + "' to " + channel);
-
-		bot.sendMessage(channel, message);
+		bot.sendSplitMessage(channel, message);
 	} // sendMessage
 
 	public void firmware(String[] args)
