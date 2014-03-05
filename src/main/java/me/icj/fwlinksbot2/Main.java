@@ -1,9 +1,13 @@
+package me.icj.fwlinksbot2;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
+import java.net.URL;
 import java.util.Properties;
 
-public class FwlinksBotMain
+public class Main
 {
 	// servers
 	private static Server[] servers;
@@ -13,6 +17,8 @@ public class FwlinksBotMain
 
 	// the socket server for receiving the messages
 	private static ReleaseMessage releaseMessage;
+
+	private static final String CONFIG_LOCATION = "/resources/config.properties";
 
 	public static void main(String[] args) throws Exception 
 	{
@@ -85,7 +91,9 @@ public class FwlinksBotMain
 		} // try
 		catch (IOException exception)
 		{
-			System.out.println("IOException caught. Message: " + exception.getMessage());
+			// most likely unable to find config.properties
+			// but it should be there
+			System.out.println("IOException caught. Most likely config.properties does not exist");
 			System.err.println(exception);
 		} // catch
 		finally

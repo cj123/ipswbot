@@ -1,3 +1,5 @@
+package me.icj.fwlinksbot2;
+
 import org.jibble.pircbot.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -75,25 +77,26 @@ public class FwlinksBot extends PircBot
 
 		APIRequest api = new APIRequest(this, channel, sender);
 
-		switch(args[0].toLowerCase())
-		{
-			case "!help":
-				sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot"
-												 + " i'm open source! more info here: https://github.com/JustaPenguin/fwlinksbot2");
-			break;
+		String request = args[0].toLowerCase();
 
-			// commands
-			case "!fw": case "!firmware": api.firmware(args); break;
-			case "!redsn0w": case "!rs": api.redsn0w(args); break;
-			case "!itunes": case "!it": api.iTunes(args); break;
-			case "!tss": api.tss(args); break;
-			case "!shsh": api.shsh(args); break;
-			case "!pwnagetool": case "!pt": api.pwnagetool(args); break;
-			case "!fwinfo": sendMessage(channel, server.toString()); break;
+		if(request.equals("!help"))
+			sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot"
+											 + " i'm open source! more info here: https://github.com/JustaPenguin/fwlinksbot2");
+		else if(request.equals("!fw") || request.equals("!firmware"))
+			api.firmware(args);
+		else if(request.equals("!redsn0w") || request.equals("!rs"))
+			api.redsn0w(args);
+		else if(request.equals("!itunes") || request.equals("!it"))
+			api.iTunes(args);
+		else if(request.equals("!tss"))
+			api.tss(args);
+		else if(request.equals("!shsh"))
+			api.shsh(args);
+		else if(request.equals("!pwnagetool") || request.equals("!pt"))
+			api.pwnagetool(args);
+		else if(request.equals("!fwinfo"))
+			sendMessage(channel, server.toString());
 
-		} // switch
-
-		return;
 	} // onMessage
 
 	public void printLog(String message)

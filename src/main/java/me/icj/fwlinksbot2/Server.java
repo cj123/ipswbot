@@ -1,3 +1,5 @@
+package me.icj.fwlinksbot2;
+
 import java.util.ArrayList;
 import java.util.List;
 
