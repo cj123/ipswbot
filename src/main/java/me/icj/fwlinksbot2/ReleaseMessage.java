@@ -1,7 +1,11 @@
 package me.icj.fwlinksbot2;
 
-import java.net.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.InetAddress;
 
 public class ReleaseMessage extends Thread
 {
@@ -17,19 +21,18 @@ public class ReleaseMessage extends Thread
 		// before 1.7
 		ServerSocket serverSocket = null;
 		Socket clientSocket = null;
-		PrintWriter out = null;
 		BufferedReader in = null;
 
 		try
 		{
 			// configure sockets
 			serverSocket = new ServerSocket(socketPort, 0, InetAddress.getByName(null));
-			clientSocket = serverSocket.accept(); 
-			out = new PrintWriter(clientSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 			while(true)
 			{
+				clientSocket = serverSocket.accept();
+				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
 				String inputLine;
 				while ((inputLine = in.readLine()) != null) {
 					// new message
@@ -55,8 +58,7 @@ public class ReleaseMessage extends Thread
 			try {
 				if(serverSocket != null) serverSocket.close();
 				if(clientSocket != null) clientSocket.close();
-				if(out != null) out.close();
-				if(in != null) in.close();				
+				if(in != null) in.close();
 			}
 			catch (IOException e)
 			{
