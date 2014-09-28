@@ -80,7 +80,7 @@ public class FwlinksBot extends PircBot
 		String request = args[0].toLowerCase();
 
 		if(request.equals("!help"))
-			sendMessage(channel, sender + ": view my commands here: http://api.ios.icj.me/docs/fwlinksbot"
+			sendMessage(channel, sender + ": view my commands here: http://api.ipsw.me/docs/2/fwlinksbot"
 											 + " i'm open source! more info here: https://github.com/JustaPenguin/fwlinksbot2");
 		else if(request.equals("!fw") || request.equals("!firmware"))
 			api.firmware(args);

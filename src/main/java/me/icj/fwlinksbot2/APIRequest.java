@@ -5,12 +5,14 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class APIRequest
 {
 
-	private final static String APIBASE = "http://api.ios.icj.me/v2";
-	private final static double VERSION = 2.0;
+	private final static String APIBASE = "http://api.ipsw.me/v2.1";
+	private final static double VERSION = 2.1;
+	private final static String OLD_APIBASE = "http://api.ipsw.me/v2"; // i'm really sorry for this
 
 	private final FwlinksBot bot;
 	private final String channel;
@@ -92,6 +94,20 @@ public class APIRequest
 		bot.sendSplitMessage(channel, message);
 	} // sendMessage
 
+	private String[] windowsAliases = new String[] {"windows", "win"};
+	private String[] macAliases = new String[] {"mac os x", "macosx", "mac", "os x", "osx", "mac_os_x", "os_x"};
+
+	private String platformAlias(String platform)
+	{
+		if (Arrays.asList(windowsAliases).contains(platform.toLowerCase())) {
+			return "win";
+		} else if (Arrays.asList(macAliases).contains(platform.toLowerCase())) {
+			return "osx";
+		} else {
+			return "";
+		}
+	} // platformAlias
+
 	public void firmware(String[] args)
 	{
 		if(args.length < 2)
@@ -125,8 +141,9 @@ public class APIRequest
 		} // if
 
 		args = argsPrepare(args);
+		args[1] = platformAlias(args[1]);
 
-		String response = makeURLRequest(APIBASE + "/redsn0w/" + args[1] + "/" + args[2] + "/" + args[3]);
+		String response = makeURLRequest(OLD_APIBASE + "/redsn0w/" + args[1] + "/" + args[2] + "/" + args[3]);
 
 		sendMessage((response != null
 					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
@@ -143,11 +160,12 @@ public class APIRequest
 		}
 
 		args = argsPrepare(args);
+		args[1] = platformAlias(args[1]);
 
 		String response;
 
 		// return both 32 and 64 bit urls for windows
-		if(args[1].toLowerCase().equals("windows") && args[3].toLowerCase().equals("url"))
+		if(args[1].toLowerCase().equals("win") && args[3].toLowerCase().equals("url"))
 			response = "32 bit: " + makeURLRequest(APIBASE + "/iTunes/" + args[1] + "/" + args[2] + "/" + "url")
 						+ " 64 bit: " + makeURLRequest(APIBASE + "/iTunes/" + args[1] + "/" + args[2] + "/" + "64biturl");
 		else
@@ -212,7 +230,7 @@ public class APIRequest
 			args = argsNew;
 		} // else if
 
-		String response = makeURLRequest(APIBASE + "/PwnageTool/" + args[1] + "/" + args[2]);
+		String response = makeURLRequest(OLD_APIBASE + "/PwnageTool/" + args[1] + "/" + args[2]);
 
 		sendMessage((response != null
 					? "the " + args[2] + " for PwnageTool (" + args[1] + ") is " + response 
