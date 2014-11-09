@@ -10,9 +10,9 @@ import java.util.Arrays;
 public class APIRequest
 {
 
-	private final static String APIBASE = "http://api.ipsw.me/v2.1";
+	private final static String APIBASE = "https://api.ipsw.me/v2.1";
 	private final static double VERSION = 2.1;
-	private final static String OLD_APIBASE = "http://api.ipsw.me/v2"; // i'm really sorry for this
+	private final static String OLD_APIBASE = "https://api.ipsw.me/v2"; // i'm really sorry for this
 
 	private final FwlinksBot bot;
 	private final String channel;
