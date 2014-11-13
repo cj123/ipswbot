@@ -29,7 +29,7 @@ public class Main
 		for(int botIndex = 0; botIndex < servers.length; botIndex++)
 		{
 			// create a new instance of FwlinksBot with the server
-			FwlinksBot bot = new FwlinksBot(servers[botIndex]);
+			FwlinksBot bot = new FwlinksBot(servers[botIndex], logLocation);
 			bots[botIndex] = bot;
 			try 
 			{
@@ -60,6 +60,9 @@ public class Main
 
 	private static boolean verbose = false;
 
+	// log location
+	private static String logLocation = "";
+
 	public static void readProperties()
 	{
 		Properties prop = new Properties();
@@ -73,6 +76,7 @@ public class Main
 			prop.load(input);
 			startReleaseMessageServer = Boolean.parseBoolean(prop.getProperty("startReleaseMessageServer"));
 			verbose = Boolean.parseBoolean(prop.getProperty("verbose"));
+			logLocation = prop.getProperty("logLocation");
 
 			String[] parsedServers = prop.getProperty("servers").split(",");
 

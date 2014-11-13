@@ -4,5 +4,6 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.next
 release.properties
-
+dependency-reduced-pom.xml
 config.properties
+logs/

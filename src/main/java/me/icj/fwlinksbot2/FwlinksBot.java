@@ -4,15 +4,22 @@ import org.jibble.pircbot.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class FwlinksBot extends PircBot
 {
 	private Server server;
+	private String logLocation = "";
 
-	public FwlinksBot(Server requiredServer)
+	public FwlinksBot(Server requiredServer, String requiredLogLocation)
 	{
 		super();
+
 		server = requiredServer;
+		logLocation = requiredLogLocation;
 
 		// configuration
 		setName("ipswbot");
@@ -104,6 +111,43 @@ public class FwlinksBot extends PircBot
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm:ss] ");
 		System.out.println(dateFormat.format(date) + message);
+
+		// write to the log file too
+		writeLog(dateFormat.format(date) + message);
+	}
+
+	private void writeLog(String message)
+	{
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		PrintWriter output = null;
+
+		try 
+		{
+			File logFile = new File(logLocation, dateFormat.format(date) + ".log");
+
+			if(!logFile.exists()) {
+				logFile.createNewFile();
+			}
+
+			output = new PrintWriter(new FileWriter(logFile, true));
+			output.println(message);
+		}
+		catch (IOException exception) 
+		{
+			System.err.println(exception);
+		}
+		finally
+		{
+			if(output != null)
+			{
+				output.close();
+
+				if(output.checkError())
+					System.err.println("Unable to close log location");
+			} // if
+		}
 	}
 
 	@Override
@@ -111,7 +155,7 @@ public class FwlinksBot extends PircBot
 	{
 		int reconnectAttempts = 0;
 
-		System.out.println("Connection to " + getServer() + " dropped, "
+		printLog("Connection to " + getServer() + " dropped, "
 											 + "trying to reconnect...");
 
 		// try to reconnect
