@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class APIRequest
 {
@@ -108,6 +110,23 @@ public class APIRequest
 		}
 	} // platformAlias
 
+	private String parseRFC3339(String toParse)
+	{
+		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		SimpleDateFormat target = new SimpleDateFormat("EEE, MMM d yyyy 'at' HH:mm:ss");
+		String result = "";
+
+		try {
+			Date date = parser.parse(toParse);
+			result = target.format(date);
+		} catch (Exception e) {
+			System.out.println("Date format exception");
+			System.err.println(e);
+		}
+
+		return result;
+	} // parseRFC3339
+
 	public void firmware(String[] args)
 	{
 		if(args.length < 2)
@@ -125,6 +144,12 @@ public class APIRequest
 		} // if
 
 		String response = makeURLRequest(APIBASE + "/" + args[1] + "/" + args[2] + "/" + args[3]);
+
+		if(args[3].equals("releasedate") || args[3].equals("uploaddate"))
+		{
+			// format the response in something slightly nicer than RFC3339
+			response = parseRFC3339(response);
+		}
 
 		sendMessage((response != null
 					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
@@ -170,6 +195,12 @@ public class APIRequest
 						+ " 64 bit: " + makeURLRequest(APIBASE + "/iTunes/" + args[1] + "/" + args[2] + "/" + "64biturl");
 		else
 			response = makeURLRequest(APIBASE + "/iTunes/" + args[1] + "/" + args[2] + "/" + args[3]);
+
+		if(args.length > 2 && (args[3].equals("releasedate") || args[3].equals("uploaddate")))
+		{
+			// format the response in something slightly nicer than RFC3339
+			response = parseRFC3339(response);
+		}
 
 		sendMessage((response != null
 					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
