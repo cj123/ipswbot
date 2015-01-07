@@ -9,13 +9,11 @@ import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class FwlinksBot extends PircBot
-{
+public class FwlinksBot extends PircBot {
 	private Server server;
 	private String logLocation = "";
 
-	public FwlinksBot(Server requiredServer, String requiredLogLocation)
-	{
+	public FwlinksBot(Server requiredServer, String requiredLogLocation) {
 		super();
 
 		server = requiredServer;
@@ -28,8 +26,7 @@ public class FwlinksBot extends PircBot
 		setAutoNickChange(true);
 	}
 
-	public void errorMessage(String channel, String sender, String message)
-	{
+	public void errorMessage(String channel, String sender, String message) {
 		printLog("error: " + sender + ": " + message);
 		sendMessage(channel, sender + ": " + message);
 	} // errorMessage
@@ -37,19 +34,15 @@ public class FwlinksBot extends PircBot
 	// the max amount of chars before splitting a message into parts
 	private static final int MESSAGE_SPLIT_LENGTH = 300;
 
-	public void sendSplitMessage(String channel, String message)
-	{
+	public void sendSplitMessage(String channel, String message) {
 
 		printLog("Sending message '" + message + "' to " + channel);
 
-		if(message.length() >= 1000)
-		{
+		if(message.length() >= 1000) {
 			// this request obviously is not valid. Kill it, kill it quick
 			printLog("response was too long. not sending to channel...");
 			return;
-		} // if
-		else if(message.length() > MESSAGE_SPLIT_LENGTH)
-		{
+		} else if(message.length() > MESSAGE_SPLIT_LENGTH) {
 
 			String[] splitInput = message.split("(?<=\\G.{" + MESSAGE_SPLIT_LENGTH + "})");
 
@@ -60,16 +53,13 @@ public class FwlinksBot extends PircBot
 
 			sendMessage(channel, splitInput[splitInput.length - 1]);
 
-		} // else if
-		else
-		{
+		} else {
 			sendMessage(channel, message);
-		} // else
+		}
 	} // sendSplitMessage
 
 	@Override
-	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel)
-	{
+	protected void onInvite(String targetNick, String sourceNick, String sourceLogin, String sourceHostname, String channel) {
 		printLog("Invite to channel " + channel + " received. Joining...");
 		joinChannel(channel);
 		server.addChannel(channel);
@@ -77,8 +67,7 @@ public class FwlinksBot extends PircBot
 	} // onInvite
 
 	@Override
-	protected void onMessage(String channel, String sender, String login, String hostname, String message)
-	{
+	protected void onMessage(String channel, String sender, String login, String hostname, String message) {
 		// parse args into an array
 		String[] args = message.split(" ");
 
@@ -106,8 +95,7 @@ public class FwlinksBot extends PircBot
 
 	} // onMessage
 
-	public void printLog(String message)
-	{
+	public void printLog(String message) {
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm:ss] ");
 		System.out.println(dateFormat.format(date) + message);
@@ -116,15 +104,13 @@ public class FwlinksBot extends PircBot
 		writeLog(dateFormat.format(date) + message);
 	}
 
-	private void writeLog(String message)
-	{
+	private void writeLog(String message) {
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		PrintWriter output = null;
 
-		try 
-		{
+		try {
 			File logFile = new File(logLocation, dateFormat.format(date) + ".log");
 
 			if(!logFile.exists()) {
@@ -133,15 +119,10 @@ public class FwlinksBot extends PircBot
 
 			output = new PrintWriter(new FileWriter(logFile, true));
 			output.println(message);
-		}
-		catch (IOException exception) 
-		{
+		} catch (IOException exception) {
 			System.err.println(exception);
-		}
-		finally
-		{
-			if(output != null)
-			{
+		} finally {
+			if(output != null) {
 				output.close();
 
 				if(output.checkError())
@@ -151,55 +132,41 @@ public class FwlinksBot extends PircBot
 	}
 
 	@Override
-	protected void onDisconnect()
-	{
+	protected void onDisconnect() {
 		int reconnectAttempts = 0;
 
 		printLog("Connection to " + getServer() + " dropped, "
 											 + "trying to reconnect...");
 
 		// try to reconnect
-		while(!isConnected() && reconnectAttempts < 15)
-		{
-			try
-			{
+		while(!isConnected() && reconnectAttempts < 15) {
+			try {
 				// reconnect
 				reconnectAttempts++;
 				reconnect();
-			} // try
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				// failed to reconnect
 				printLog("Error: could not reconnect to " + getServer() + "\n" + e.getMessage());
-				try
-				{
+				try {
 						Thread.sleep(4000);
-				} // try
-				catch(InterruptedException exception) 
-				{
+				} catch(InterruptedException exception) {
 						Thread.currentThread().interrupt();
 				} // catch
 			} // catch
 		} // while
 
 		// check if it has reconnected
-		if(isConnected())
-		{
+		if(isConnected()) {
 			printLog("Reconnected to server: " + getServer());
 
-			if(server.getAddress().equals(getServer()))
-			{
+			if(server.getAddress().equals(getServer())) {
 				// rejoin channels
 				for(String channel : server.getChannels())
 					joinChannel(channel);
-			} // if
-			else
-			{
+			} else {
 				printLog("We somehow connected to a different server?");
 			} // else
-		} // if
-		else
-		{
+		} else {
 			printLog("Unable to reconnect to server: " + getServer() + " - disabling.");
 		} // else
 

@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class APIRequest
-{
+public class APIRequest {
 
 	private final static String APIBASE = "https://api.ipsw.me/v2.1";
 	private final static double VERSION = 2.1;
@@ -20,17 +19,14 @@ public class APIRequest
 	private final String channel;
 	private final String sender;
 
-	public APIRequest(FwlinksBot requiredBot, String requiredChannel, String requiredSender)
-	{
+	public APIRequest(FwlinksBot requiredBot, String requiredChannel, String requiredSender) {
 		bot = requiredBot;
 		channel = requiredChannel;
 		sender = requiredSender;
 	} // APIRequest
 
-	private static String makeURLRequest(String url)
-	{
-		try 
-		{
+	private static String makeURLRequest(String url) {
+		try {
 			URL requestURL = new URL(url);
 			HttpURLConnection connection = (HttpURLConnection) requestURL.openConnection();
 			try {
@@ -41,24 +37,17 @@ public class APIRequest
 				connection.setReadTimeout(5000);
 
 				BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			
-				try
-				{
+
+				try {
 					return response.readLine();
-				} // try
-				finally
-				{
+				} finally {
 					response.close();
 				} // finally
 
-			} // try
-			finally 
-			{
+			} finally  {
 				connection.disconnect();
 			} // finally
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} // catch
 
@@ -66,8 +55,7 @@ public class APIRequest
 	} // makeURLRequest
 
 	// fill out args when less than two have been supplied
-	private String[] argsPrepare(String[] args)
-	{
+	private String[] argsPrepare(String[] args) {
 		if (args.length == 2 || args.length == 3) {
 			// assume that the request is the URL, expand the array to add 3rd index
 			String argsNew[] = new String[4];
@@ -90,8 +78,7 @@ public class APIRequest
 		return args;
 	} // argsPrepare
 
-	private void sendMessage(String message)
-	{
+	private void sendMessage(String message) {
 		message = sender + ": " + message;
 		bot.sendSplitMessage(channel, message);
 	} // sendMessage
@@ -99,8 +86,7 @@ public class APIRequest
 	private String[] windowsAliases = new String[] {"windows", "win"};
 	private String[] macAliases = new String[] {"mac os x", "macosx", "mac", "os x", "osx", "mac_os_x", "os_x"};
 
-	private String platformAlias(String platform)
-	{
+	private String platformAlias(String platform) {
 		if (Arrays.asList(windowsAliases).contains(platform.toLowerCase())) {
 			return "win";
 		} else if (Arrays.asList(macAliases).contains(platform.toLowerCase())) {
@@ -110,8 +96,7 @@ public class APIRequest
 		}
 	} // platformAlias
 
-	private String parseRFC3339(String toParse)
-	{
+	private String parseRFC3339(String toParse) {
 		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		SimpleDateFormat target = new SimpleDateFormat("EEE, MMM d yyyy 'at' HH:mm:ss");
 		String result = "";
@@ -127,26 +112,22 @@ public class APIRequest
 		return result;
 	} // parseRFC3339
 
-	public void firmware(String[] args)
-	{
-		if(args.length < 2)
-		{
+	public void firmware(String[] args) {
+		if(args.length < 2) {
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
 
 		args = argsPrepare(args);
 
-		if(args[3].equals("info") || args[3].equals("info.json"))
-		{
+		if(args[3].equals("info") || args[3].equals("info.json")) {
 			bot.errorMessage(channel, sender, "this type of request is not supported.");
 			return;
 		} // if
 
 		String response = makeURLRequest(APIBASE + "/" + args[1] + "/" + args[2] + "/" + args[3]);
 
-		if(args[3].equals("releasedate") || args[3].equals("uploaddate"))
-		{
+		if(args[3].equals("releasedate") || args[3].equals("uploaddate")) {
 			// format the response in something slightly nicer than RFC3339
 			response = parseRFC3339(response);
 		}
@@ -156,11 +137,9 @@ public class APIRequest
 					: "this request combo is unknown."));
 	} // firmware
 
-	public void redsn0w(String[] args)
-	{
+	public void redsn0w(String[] args) {
 
-		if(args.length < 2)
-		{
+		if(args.length < 2) {
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
@@ -175,11 +154,9 @@ public class APIRequest
 					: "this request combo is unknown."));
 	} // redsn0w
 
-	public void iTunes(String[] args)
-	{
+	public void iTunes(String[] args) {
 
-		if(args.length < 2)
-		{
+		if(args.length < 2) {
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		}
@@ -196,22 +173,19 @@ public class APIRequest
 		else
 			response = makeURLRequest(APIBASE + "/iTunes/" + args[1] + "/" + args[2] + "/" + args[3]);
 
-		if(args.length > 2 && (args[3].equals("releasedate") || args[3].equals("uploaddate")))
-		{
+		if(args.length > 2 && (args[3].equals("releasedate") || args[3].equals("uploaddate"))) {
 			// format the response in something slightly nicer than RFC3339
 			response = parseRFC3339(response);
 		}
 
 		sendMessage((response != null
-					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response 
+					? "the " + args[3] + " for " + args[1] + " (" + args[2] + ") is " + response
 					: "this request combo is unknown."));
 	} // iTunes
 
-	public void tss(String[] args)
-	{
+	public void tss(String[] args) {
 
-		if(args.length < 2)
-		{
+		if(args.length < 2) {
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
@@ -222,11 +196,9 @@ public class APIRequest
 			sendMessage(response);
 	} // tss
 
-	public void shsh(String[] args)
-	{
+	public void shsh(String[] args) {
 
-		if(args.length < 2)
-		{
+		if(args.length < 2) {
 			bot.errorMessage(channel, sender, "incorrect parameters. !help for details");
 			return;
 		} // if
@@ -237,11 +209,9 @@ public class APIRequest
 			sendMessage(response);
 	} // shsh
 
-	public void pwnagetool(String[] args)
-	{
+	public void pwnagetool(String[] args) {
 
-		if(args.length < 2)
-		{
+		if(args.length < 2) {
 			String[] argsNew = new String[3];
 
 			argsNew[0] = args[0];
@@ -249,9 +219,7 @@ public class APIRequest
 			argsNew[2] = "url";
 
 			args = argsNew;
-		} // if
-		else if(args.length < 3)
-		{
+		} else if(args.length < 3) {
 			String[] argsNew = new String[3];
 
 			argsNew[0] = args[0];

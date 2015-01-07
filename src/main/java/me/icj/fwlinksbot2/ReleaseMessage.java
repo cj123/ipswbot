@@ -7,14 +7,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.InetAddress;
 
-public class ReleaseMessage extends Thread
-{
+public class ReleaseMessage extends Thread {
 	private static final int socketPort = 4536;
 	private final FwlinksBot[] bots;
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		bots[0].printLog("starting socket server on port " + socketPort);
 
 		// to avoid try-with-resources which isn't supported
@@ -23,13 +21,11 @@ public class ReleaseMessage extends Thread
 		Socket clientSocket = null;
 		BufferedReader in = null;
 
-		try
-		{
+		try {
 			// configure sockets
 			serverSocket = new ServerSocket(socketPort, 0, InetAddress.getByName(null));
 
-			while(true)
-			{
+			while(true) {
 				clientSocket = serverSocket.accept();
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
@@ -38,38 +34,29 @@ public class ReleaseMessage extends Thread
 					// new message
 					bots[0].printLog("new session message: " + inputLine);
 
-					for (FwlinksBot bot : bots)
-					{
+					for (FwlinksBot bot : bots) {
 						// send to each channel
-						for(String channel : bot.getChannels())
-						{
-								bot.sendSplitMessage(channel, "[Update] " + inputLine);
+						for(String channel : bot.getChannels()) {
+							bot.sendSplitMessage(channel, "[Update] " + inputLine);
 						} // for
 					} // for
 				} // while
 			} // while
-		} // try
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			System.out.println(e.getMessage());
-		} // catch
-		finally
-		{
+		} finally {
 			try {
 				if(serverSocket != null) serverSocket.close();
 				if(clientSocket != null) clientSocket.close();
 				if(in != null) in.close();
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
 		} // finally
 
 	} // run
 
-	public ReleaseMessage(FwlinksBot[] requiredBots)
-	{
+	public ReleaseMessage(FwlinksBot[] requiredBots) {
 		bots = requiredBots;
 	} // ReleaseMessage
 

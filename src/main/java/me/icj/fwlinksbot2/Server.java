@@ -3,51 +3,43 @@ package me.icj.fwlinksbot2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server
-{
+public class Server {
 	// channels, address and port
 	private List<String> channels = new ArrayList<String>();
 	private String address;
 	private int port;
 
-	public Server(String requiredAddress, int requiredPort, String[] requiredChannels)
-	{
+	public Server(String requiredAddress, int requiredPort, String[] requiredChannels) {
 		for(String channel : requiredChannels)
 			channels.add(channel);
-			
+
 		address = requiredAddress;
 		port = requiredPort;
 	} // Server
 
-	public String getAddress()
-	{
+	public String getAddress() {
 		return address;
 	} // getAddress
 
-	public int getPort()
-	{
+	public int getPort() {
 		return port;
 	} // getPort
 
-	public void addChannel(String channelName)
-	{
+	public void addChannel(String channelName) {
 		// add a channel to the channels List
 		if(!channels.contains(channelName))
 			channels.add(channelName);
 	} // addChannel
 
-	public List<String> getChannels()
-	{
+	public List<String> getChannels() {
 		return channels;
 	} // getChannels
 
-	public String toString()
-	{
+	public String toString() {
 		// get channels comma separated
 		StringBuilder builder = new StringBuilder();
 		builder.append(channels.get(0));
-		for (int index = 1; index < channels.size(); index++)
-		{
+		for (int index = 1; index < channels.size(); index++) {
 			builder.append(", ");
 			builder.append(channels.get(index));
 		} // for
