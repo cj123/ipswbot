@@ -1,4 +1,4 @@
-# Firmware Links Bot v2.0
+# ipswbot
 
 A rewrite of the original FwlinksBot, in Java. 
 
